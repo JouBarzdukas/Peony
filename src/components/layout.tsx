@@ -139,14 +139,14 @@ function NavigationMenuComponent() {
                                     </a>
                                 </NavigationMenuLink>
                             </li>
-                            <ListItem href="/your-industry/rate" title="Rate your workplace!">
+                            <ListItem href="/your-industry/workplace" title="Your Workplace!">
+                                See your workplace's data and reviews.
+                            </ListItem>
+                            <ListItem href="/your-industry/rate" title="Rate Your Workplace!">
                                 Give an anonymous review of your workplace.
                             </ListItem>
-                            <ListItem href="/analytics" title="Job analytics">
-                                Analyze salary trends for demographics in your industry.
-                            </ListItem>
-                            <ListItem href="/docs/primitives/typography" title="Typography">
-                                Styles for headings, paragraphs, lists...etc
+                            <ListItem href="/your-industry/compare" title="Comparing Tool!">
+                                Compare your own situation with others in a similar situation.
                             </ListItem>
                         </ul>
                     </NavigationMenuContent>
