@@ -1,9 +1,9 @@
 "use client"
 import type {AppProps} from 'next/app'
-import {AuthProvider} from "@propelauth/react";
+import {AuthProvider, useAuthInfo, useLogoutFunction} from "@propelauth/react";
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Globe, Users, Menu, List } from "lucide-react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
@@ -204,22 +204,47 @@ function MobileMenu({ isActive }: { isActive: (path: string) => boolean }) {
 }
 
 function UserMenu() {
+    const { isLoggedIn, user } = useAuthInfo()
+    const logoutFunction = useLogoutFunction()
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        await logoutFunction(true)
+        router.push('/')
+    }
+
+    if (!isLoggedIn) {
+        return (
+            <Button variant="secondary" size="sm" asChild>
+                <Link href="/login">Log In</Link>
+            </Button>
+        )
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="icon">
-                    <Users className="h-5 w-5" />
-                    <span className="sr-only">Toggle user menu</span>
+                <Button variant="secondary" size="sm">
+                    <Users className="h-5 w-5 mr-2" />
+                    {user.email}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Contributions</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/contributions">Contributions</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/settings">Settings</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onSelect={handleLogout}>
+                    Log out
+                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
@@ -241,4 +266,4 @@ function Footer() {
             </div>
         </footer>
     )
-}
+};
