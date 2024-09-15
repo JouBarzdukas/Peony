@@ -148,15 +148,6 @@ function NavigationMenuComponent() {
                             <ListItem href="/docs/primitives/typography" title="Typography">
                                 Styles for headings, paragraphs, lists...etc
                             </ListItem>
-                            {components.map((component) => (
-                                <ListItem
-                                    key={component.title}
-                                    title={component.title}
-                                    href={component.href}
-                                >
-                                    {component.description}
-                                </ListItem>
-                            ))}
                         </ul>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
