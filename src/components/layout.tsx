@@ -3,6 +3,7 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Globe, Users, Menu, List } from "lucide-react"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 import {
     NavigationMenu,
@@ -81,7 +82,7 @@ function Header({ isActive }: { isActive: (path: string) => boolean }) {
                     <Link href="/" className="mr-4 flex items-center space-x-2">
                         <Globe className="h-6 w-6" />
                         <span className="hidden font-bold sm:inline-block">
-                            Inclusive
+                            Peony
                         </span>
                     </Link>
                     <nav className="flex items-center space-x-4 text-sm font-medium">
@@ -125,13 +126,14 @@ function NavigationMenuComponent() {
                             <li className="row-span-3">
                                 <NavigationMenuLink asChild>
                                     <a
-                                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                        href="/"
+                                        className="flex h-full w-full select-none flex-col items-center justify-center rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                                        href="/dashboard"
                                     >
-                                        <div className="mb-2 mt-4 text-lg font-medium">
+                                        <Image src="/logo.png" alt="Peony" width={180} height={60} className="h-24 w-auto" />
+                                        <div className="mb-2 mt-4 text-lg font-medium text-center">
                                             My Dashboard
                                         </div>
-                                        <p className="text-sm leading-tight text-muted-foreground">
+                                        <p className="text-sm leading-tight text-center text-muted-foreground">
                                             See all of your data in one place!
                                         </p>
                                     </a>
@@ -201,7 +203,7 @@ function MobileMenu({ isActive }: { isActive: (path: string) => boolean }) {
             <SheetContent side="left" className="pr-0">
                 <Link href="/" className="flex items-center space-x-2">
                     <Globe className="h-6 w-6" />
-                    <span className="font-bold">Inclusive Insights</span>
+                    <span className="font-bold">Peony</span>
                 </Link>
                 <nav className="mt-4 flex flex-col space-y-2">
                     <NavLink href="/" isActive={isActive} label="Home" />
@@ -247,7 +249,7 @@ function Footer() {
                     </p>
                 </div>
                 <p className="text-center text-sm md:text-left">
-                    © 2024 Inclusive Insights. All rights reserved.
+                    © 2024 Peony. All rights reserved.
                 </p>
             </div>
         </footer>
