@@ -82,7 +82,13 @@ function Header({ isActive }: { isActive: (path: string) => boolean }) {
             <div className="container flex h-14 items-center px-2">
                 <div className="mr-4 hidden md:flex">
                     <Link href="/" className="mr-4 flex items-center space-x-2">
-                        <Globe className="h-6 w-6" />
+                    <Image 
+                            src="/logo.png" 
+                            alt="Peony Logo" 
+                            width={24} // Adjust the width and height to match the Globe icon size
+                            height={24}
+                            className="h-6 w-6" // These classes ensure consistent sizing
+                        />
                         <span className="hidden font-bold sm:inline-block">
                             Peony
                         </span>
@@ -189,7 +195,13 @@ function MobileMenu({ isActive }: { isActive: (path: string) => boolean }) {
             </SheetTrigger>
             <SheetContent side="left" className="pr-0">
                 <Link href="/" className="flex items-center space-x-2">
-                    <Globe className="h-6 w-6" />
+                <Image 
+                        src="logo.png" 
+                        alt="Peony Logo" 
+                        width={24} 
+                        height={24}
+                        className="h-6 w-6"
+                    />
                     <span className="font-bold">Peony</span>
                 </Link>
                 <nav className="mt-4 flex flex-col space-y-2">
@@ -230,7 +242,13 @@ function Footer() {
         <footer className="border-t bg-muted/40">
             <div className="container flex flex-col items-center justify-between gap-4 py-10 px-4 md:h-24 md:flex-row md:py-0 md:px-8">
                 <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
-                    <Globe className="h-6 w-6" />
+                <Image 
+                        src="/logo.png" 
+                        alt="Peony Logo" 
+                        width={24} 
+                        height={24}
+                        className="h-6 w-6"
+                    />
                     <p className="text-center text-sm leading-loose md:text-left">
                         Built for equality. Empowering fair compensation for all.
                     </p>
