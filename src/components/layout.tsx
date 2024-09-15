@@ -1,4 +1,6 @@
 "use client"
+import type {AppProps} from 'next/app'
+import {AuthProvider} from "@propelauth/react";
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -155,17 +157,11 @@ function NavigationMenuComponent() {
                     <NavigationMenuTrigger>All Jobs</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                            <ListItem href="/all-jobs" title="New Jobs">
-                                Discover the latest job postings in your industry.
+                            <ListItem href="/all-jobs/company-search" title="Search Other Workplaces!">
+                                Access other workplaces to help you in your job search.
                             </ListItem>
-                            <ListItem href="/all-jobs/analytics" title="Job Analytics">
-                                Analyze job trends and opportunities in your field.
-                            </ListItem>
-                            <ListItem href="/all-jobs/company-search" title="Search other workplaces">
-                                Access resources to help you in your job search.
-                            </ListItem>
-                            <ListItem href="/all-jobs/salaries" title = "New Salaries">
-                                See the list of the newest anonymous salaries.
+                            <ListItem href="/all-jobs/switch" title="Change Your Job!">
+                                Changed where you worked? Use this tool to reorient your data to your new workplace.
                             </ListItem>
                         </ul>
                     </NavigationMenuContent>
