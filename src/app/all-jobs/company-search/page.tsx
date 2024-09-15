@@ -11,13 +11,20 @@ import { Search, Building2, DollarSign, Users } from 'lucide-react'
 import Layout from "@/components/layout"
 import RangeSlider from '@/components/ui/range-slider'
 
-// Mock data - replace with real data in a production environment
+import { amazonData } from '../../../../data/amazonData'
+import { googleData } from '../../../../data/googleData'
+import { goldmansachsData } from '../../../../data/goldmanSachsData'
+import { metaData } from '../../../../data/metaData'
+import { nvidiaData } from '../../../../data/nvidiaData'
+import { walmartData } from '../../../../data/walmartData'
+
 const companies = [
-    { id: 1, name: "Bank of America", industry: "Finance", size: "Large", avgSalary: 85000, diversityScore: 0.75, othername: "bank-of-america" },
-    { id: 2, name: "McDonald's", industry: "Food Service", size: "Large", avgSalary: 35000, diversityScore: 0.8, othername: "mcdonalds" },
-    { id: 3, name: "Walmart", industry: "Retail", size: "Large", avgSalary: 40000, diversityScore: 0.7, othername: "walmart"},
-    { id: 4, name: "Google", industry: "Technology", size: "Large", avgSalary: 120000, diversityScore: 0.65, othername: "google" },
-    { id: 5, name: "Local Startup", industry: "Technology", size: "Small", avgSalary: 70000, diversityScore: 0.6, othername: "local-startup"},
+    { ...amazonData, id: 1, othername: "amazon" },
+    { ...googleData, id: 2, othername: "google" },
+    { ...goldmansachsData, id: 3, othername: "goldmanSachs" },
+    { ...metaData, id: 4, othername: "meta" },
+    { ...nvidiaData, id: 5, othername: "nvidia" },
+    { ...walmartData, id: 6, othername: "walmart" }
 ]
 
 export default function CompanySearch() {
@@ -25,10 +32,9 @@ export default function CompanySearch() {
     const [searchTerm, setSearchTerm] = useState("")
     const [industryFilter, setIndustryFilter] = useState("all")
     const [sizeFilter, setSizeFilter] = useState("all")
-    const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 150000])
+    const [salaryRange, setSalaryRange] = useState<[number, number]>([0, 600000])
 
     useEffect(() => {
-        // Force scrollbar to always be present
         document.body.style.overflowY = 'scroll'
         return () => {
             document.body.style.overflowY = 'auto'
@@ -38,12 +44,11 @@ export default function CompanySearch() {
     const filteredCompanies = companies.filter(company => 
         company.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (industryFilter === "all" || company.industry === industryFilter) &&
-        (sizeFilter === "all" || company.size === sizeFilter) &&
-        company.avgSalary >= salaryRange[0] && company.avgSalary <= salaryRange[1]
+        (sizeFilter === "all" || (company.keyStats.totalEmployees > 10000 ? "Large" : "Small") === sizeFilter) &&
+        company.keyStats.averageSalary >= salaryRange[0] && company.keyStats.averageSalary <= salaryRange[1]
     )
 
     const handleCompanyClick = (companyId: string) => {
-        // Navigate to the company page
         router.push(`/company/${companyId}`)
     }
 
@@ -68,10 +73,9 @@ export default function CompanySearch() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Industries</SelectItem>
-                            <SelectItem value="Finance">Finance</SelectItem>
-                            <SelectItem value="Food Service">Food Service</SelectItem>
-                            <SelectItem value="Retail">Retail</SelectItem>
                             <SelectItem value="Technology">Technology</SelectItem>
+                            <SelectItem value="Finance">Finance</SelectItem>
+                            <SelectItem value="Retail">Retail</SelectItem>
                         </SelectContent>
                     </Select>
                     <Select value={sizeFilter} onValueChange={setSizeFilter}>
@@ -80,16 +84,15 @@ export default function CompanySearch() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Sizes</SelectItem>
-                            <SelectItem value="Small">Small</SelectItem>
-                            <SelectItem value="Medium">Medium</SelectItem>
                             <SelectItem value="Large">Large</SelectItem>
+                            <SelectItem value="Small">Small</SelectItem>
                         </SelectContent>
                     </Select>
                     <div className="md:col-span-2">
                         <label className="text-sm font-medium">Salary Range</label>
                         <RangeSlider
                             min={0}
-                            max={150000}
+                            max={600000}
                             step={10000}
                             value={salaryRange}
                             onValueChange={setSalaryRange}
@@ -107,8 +110,8 @@ export default function CompanySearch() {
                             <CardHeader>
                                 <CardTitle className="flex items-center justify-between">
                                     <span>{company.name}</span>
-                                    <Badge variant={company.diversityScore >= 0.7 ? "default" : "secondary"}>
-                                        {company.diversityScore >= 0.7 ? "High Diversity" : "Improving Diversity"}
+                                    <Badge variant={company.keyStats.diversityIndex >= 0.7 ? "default" : "secondary"}>
+                                        {company.keyStats.diversityIndex >= 0.7 ? "High Diversity" : "Improving Diversity"}
                                     </Badge>
                                 </CardTitle>
                             </CardHeader>
@@ -116,15 +119,15 @@ export default function CompanySearch() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="flex items-center">
                                         <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
-                                        <span className="text-sm">{company.industry}</span>
+                                        <span className="text-sm">{company.industry || "N/A"}</span>
                                     </div>
                                     <div className="flex items-center">
                                         <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                                        <span className="text-sm">{company.size}</span>
+                                        <span className="text-sm">{company.keyStats.totalEmployees > 10000 ? "Large" : "Small"}</span>
                                     </div>
                                     <div className="flex items-center col-span-2">
                                         <DollarSign className="h-4 w-4 mr-2 text-muted-foreground" />
-                                        <span className="text-sm">Avg. Salary: ${company.avgSalary.toLocaleString()}</span>
+                                        <span className="text-sm">Avg. Salary: ${company.keyStats.averageSalary.toLocaleString()}</span>
                                     </div>
                                 </div>
                                 <Button variant="outline" className="w-full mt-4">

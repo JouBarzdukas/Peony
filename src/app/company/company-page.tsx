@@ -63,9 +63,14 @@ type CompanyPageProps = {
 
 export default function CompanyPage({ companyData }: CompanyPageProps) {
   const [selectedJobRole, setSelectedJobRole] = useState<string | null>(null)
+  const [compareGroup, setCompareGroup] = useState<string | null>(null)
 
   const handleJobRoleChange = (value: string) => {
     setSelectedJobRole(value === 'all' ? null : value)
+  }
+
+  const handleCompareGroupChange = (value: string) => {
+    setCompareGroup(value === 'none' ? null : value)
   }
 
   const currentData = selectedJobRole ? companyData.jobRoles[selectedJobRole] : null
@@ -82,25 +87,47 @@ export default function CompanyPage({ companyData }: CompanyPageProps) {
     return "text-red-500"
   }
 
+  const getComparisonData = (data: Record<string, number>) => {
+    const result = [{ name: 'Ourselves (Asian Male)', value: data['Asian'] }]
+    if (compareGroup) {
+      result.push({ name: compareGroup, value: data[compareGroup] })
+    } else {
+      result.push(...Object.entries(data).map(([key, value]) => ({ name: key, value })))
+    }
+    return result
+  }
+
   return (
     <Layout>
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <img src={companyData.logo} alt={`${companyData.name} logo`} className="w-16 h-16 mr-4" />
+            <div className="flex items-center">
             <h1 className="text-3xl font-bold">{companyData.name}</h1>
           </div>
-          <Select onValueChange={handleJobRoleChange}>
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Select Job Role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
-              {Object.keys(companyData.jobRoles).map((role) => (
-                <SelectItem key={role} value={role}>{role}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex space-x-4">
+            <Select onValueChange={handleJobRoleChange}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select Job Role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Roles</SelectItem>
+                {Object.keys(companyData.jobRoles).map((role) => (
+                  <SelectItem key={role} value={role}>{role}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select onValueChange={handleCompareGroupChange}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Compare Group" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">No Comparison</SelectItem>
+                {Object.keys(companyData.payGapAnalysis.byRace).map((race) => (
+                  <SelectItem key={race} value={race}>{race}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="grid gap-6 mb-6 md:grid-cols-3">
@@ -207,10 +234,10 @@ export default function CompanyPage({ companyData }: CompanyPageProps) {
                     <h3 className="font-semibold mb-2">Pay Gap by Race</h3>
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart
-                        data={Object.entries(selectedJobRole && currentData
+                        data={getComparisonData(selectedJobRole && currentData
                           ? currentData.payGapAnalysis.byRace
                           : companyData.payGapAnalysis.byRace
-                        ).map(([race, gap]) => ({ name: race, value: gap }))}
+                        )}
                       >
                         <XAxis dataKey="name" />
                         <YAxis />
@@ -322,10 +349,10 @@ export default function CompanyPage({ companyData }: CompanyPageProps) {
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart
-                    data={Object.entries(selectedJobRole && currentData
+                    data={getComparisonData(selectedJobRole && currentData
                       ? currentData.bonusEquity
                       : companyData.bonusEquity
-                    ).map(([race, percentage]) => ({ name: race, value: percentage }))}
+                    )}
                   >
                     <XAxis dataKey="name" />
                     <YAxis />

@@ -3,29 +3,45 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
+import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
-import { StarIcon } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Layout from "@/components/layout"
 
 export default function RatePage() {
-  const [ratings, setRatings] = useState({
+  const [formData, setFormData] = useState({
+    company: '',
+    jobTitle: '',
+    salary: '',
+    yearsOfExperience: '',
+    race: '',
+    gender: '',
     enjoyability: 5,
     workLifeBalance: 5,
     compensation: 5,
     careerGrowth: 5,
     culture: 5,
+    review: ''
   })
-  const [review, setReview] = useState('')
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSelectChange = (name: string) => (value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
 
   const handleRatingChange = (metric: string, value: number[]) => {
-    setRatings(prev => ({ ...prev, [metric]: value[0] }))
+    setFormData(prev => ({ ...prev, [metric]: value[0] }))
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Here you would typically send the data to your backend
-    console.log({ ratings, review })
+    console.log(formData)
     alert('Thank you for your review!')
   }
 
@@ -36,22 +52,85 @@ export default function RatePage() {
         <form onSubmit={handleSubmit}>
           <Card className="mb-6">
             <CardHeader>
+              <CardTitle>Company Information</CardTitle>
+              <CardDescription>Tell us about your workplace:</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Input
+                name="company"
+                placeholder="Company Name"
+                value={formData.company}
+                onChange={handleInputChange}
+                required
+              />
+              <Input
+                name="jobTitle"
+                placeholder="Job Title"
+                value={formData.jobTitle}
+                onChange={handleInputChange}
+                required
+              />
+              <Input
+                name="salary"
+                type="number"
+                placeholder="Annual Salary"
+                value={formData.salary}
+                onChange={handleInputChange}
+                required
+              />
+              <Input
+                name="yearsOfExperience"
+                type="number"
+                placeholder="Years of Experience"
+                value={formData.yearsOfExperience}
+                onChange={handleInputChange}
+                required
+              />
+              <Select value={formData.race} onValueChange={handleSelectChange('race')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Race" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="asian">Asian</SelectItem>
+                  <SelectItem value="black">Black or African American</SelectItem>
+                  <SelectItem value="hispanic">Hispanic or Latino</SelectItem>
+                  <SelectItem value="native">Native American</SelectItem>
+                  <SelectItem value="white">White</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={formData.gender} onValueChange={handleSelectChange('gender')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="non-binary">Non-binary</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
+
+          <Card className="mb-6">
+            <CardHeader>
               <CardTitle>Overall Ratings</CardTitle>
               <CardDescription>Rate your workplace on the following metrics:</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {Object.entries(ratings).map(([metric, value]) => (
+              {['enjoyability', 'workLifeBalance', 'compensation', 'careerGrowth', 'culture'].map((metric) => (
                 <div key={metric} className="space-y-2">
                   <label className="text-sm font-medium capitalize">{metric.replace(/([A-Z])/g, ' $1').trim()}</label>
                   <div className="flex items-center space-x-2">
                     <Slider
-                      value={[value]}
+                      value={[formData[metric as keyof typeof formData] as number]}
                       min={1}
                       max={10}
                       step={1}
                       onValueChange={(value) => handleRatingChange(metric, value)}
                     />
-                    <span className="w-8 text-center">{value}</span>
+                    <span className="w-8 text-center">{formData[metric as keyof typeof formData]}</span>
                   </div>
                 </div>
               ))}
@@ -65,9 +144,10 @@ export default function RatePage() {
             </CardHeader>
             <CardContent>
               <Textarea
+                name="review"
                 placeholder="Write your review here..."
-                value={review}
-                onChange={(e) => setReview(e.target.value)}
+                value={formData.review}
+                onChange={handleInputChange}
                 rows={5}
               />
             </CardContent>
