@@ -85,9 +85,9 @@ function Header({ isActive }: { isActive: (path: string) => boolean }) {
                     <Image 
                             src="/logo.png" 
                             alt="Peony Logo" 
-                            width={24} // Adjust the width and height to match the Globe icon size
-                            height={24}
-                            className="h-6 w-6" // These classes ensure consistent sizing
+                            width={36} // Adjust the width and height to match the Globe icon size
+                            height={36}
+                            className="h-13 w-13" // These classes ensure consistent sizing
                         />
                         <span className="hidden font-bold sm:inline-block">
                             Peony
@@ -198,9 +198,9 @@ function MobileMenu({ isActive }: { isActive: (path: string) => boolean }) {
                 <Image 
                         src="logo.png" 
                         alt="Peony Logo" 
-                        width={24} 
-                        height={24}
-                        className="h-6 w-6"
+                        width={36} 
+                        height={36} 
+                        className="h-13 w-13"
                     />
                     <span className="font-bold">Peony</span>
                 </Link>

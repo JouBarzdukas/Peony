@@ -69,7 +69,7 @@ export default function HomePage() {
               height={100} 
               className="mx-auto mb-6"
             />
-            <h1 className="text-3xl font-bold mb-4 text-purple-800">Peony Empowering Workplace Diversity</h1>
+            <h1 className="text-3xl font-bold mb-4 text-purple-800">Empowering Workplace Diversity</h1>
             <p className="text-lg text-purple-600 max-w-2xl mx-auto mb-6">
               Our mission is to promote transparency, equality, and diversity in the workplace through data-driven insights and community engagement.
             </p>
